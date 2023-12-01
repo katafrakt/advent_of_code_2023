@@ -3,27 +3,9 @@ let file = "inputs/day1.in"
 let string_to_char_list s =
   s |> String.to_seq |> List.of_seq
 
-let read_lines file =
-  let contents = In_channel.with_open_bin file In_channel.input_all in
-  String.split_on_char '\n' contents
-
-let value_of c =
-  match c with
-  | '0' -> Some(0)
-  | '1' -> Some(1)
-  | '2' -> Some(2)
-  | '3' -> Some(3)
-  | '4' -> Some(4)
-  | '5' -> Some(5)
-  | '6' -> Some(6)
-  | '7' -> Some(7)
-  | '8' -> Some(8)
-  | '9' -> Some(9)
-  | _   -> None
-
 let find_nums line =
   let process_char ((first : int option), (last : int option)) el =
-    match (value_of el, first) with
+    match (Advent.char_to_int el, first) with
     | (Some(x), None) -> (Some(x), Some(x))
     | (Some(x), Some(_)) -> (first, Some(x))
     | (None, _) -> (first, last) in
@@ -34,11 +16,13 @@ let find_nums line =
   | _ -> 0
 
 let part1 =
-  let input = read_lines file in
-  let chars = List.map string_to_char_list input in
-  let numbers = List.map find_nums chars in
-  let result = List.fold_left (+) 0 numbers in
-  print_endline (string_of_int result)
+  file
+  |> Advent.read_lines
+  |> List.map string_to_char_list
+  |> List.map find_nums
+  |> List.fold_left (+) 0
+  |> string_of_int
+  |> print_endline
 
 let maybe_replace_num pos word num str =
   if Str.string_match word str pos then Str.replace_first word num str else str
@@ -63,12 +47,14 @@ let rec replace_words str pos =
 let replace_words str = replace_words str 0
 
 let part2 =
-  let input = read_lines file in
-  let replaced = List.map replace_words input in
-  let chars = List.map string_to_char_list replaced in
-  let numbers = List.map find_nums chars in
-  let result = List.fold_left (+) 0 numbers in
-  print_endline (string_of_int result)
+  file
+  |> Advent.read_lines
+  |> List.map replace_words
+  |> List.map string_to_char_list
+  |> List.map find_nums
+  |> List.fold_left (+) 0
+  |> string_of_int
+  |> print_endline
 
 let run =
   part1;
