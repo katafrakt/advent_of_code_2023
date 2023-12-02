@@ -15,7 +15,7 @@ let find_nums line =
   | (Some(x), Some(y)) -> x * 10 + y
   | _ -> 0
 
-let part1 =
+let part1 () =
   file
   |> Advent.read_lines
   |> List.map string_to_char_list
@@ -46,7 +46,7 @@ let rec replace_words str pos =
 
 let replace_words str = replace_words str 0
 
-let part2 =
+let part2 () =
   file
   |> Advent.read_lines
   |> List.map replace_words
@@ -56,6 +56,6 @@ let part2 =
   |> string_of_int
   |> print_endline
 
-let run =
-  part1;
-  part2;
+let run () =
+  part1 ();
+  part2 ();

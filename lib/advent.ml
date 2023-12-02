@@ -1,6 +1,7 @@
 let read_lines file =
   let contents = In_channel.with_open_bin file In_channel.input_all in
   String.split_on_char '\n' contents
+  |> List.filter (fun s -> (String.length (String.trim s)) > 0)
 
   let char_to_int c =
     match c with
