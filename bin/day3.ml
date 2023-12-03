@@ -54,12 +54,23 @@ let parse_input lines =
   let results = { symbols = []; numbers = []; cur_x = 0; cur_y = 0; current_number = None} in
   List.fold_left parse_line results lines
 
+let are_positions_adjacent pos1 pos2 =
+ (Int.abs (pos1.x - pos2.x)) <= 1 && (Int.abs (pos1.y - pos2.y)) <= 1
+
 let numbers_adjacent_to_symbols results =
-  let is_adjacent_to_symbol pos symbols =
-    List.exists (fun symbol -> (Int.abs (pos.x - symbol.position.x)) <= 1 && (Int.abs (pos.y - symbol.position.y)) <= 1) symbols in
+  let is_adjacent_to_symbol pos (symbols : symbol list) =
+    List.exists (fun symbol -> are_positions_adjacent pos symbol.position) symbols in
   let check_number num =
     List.exists (fun pos -> is_adjacent_to_symbol pos results.symbols) num.positions in
   List.filter check_number results.numbers
+
+let find_gears_sum results =
+  List.filter (fun sym -> sym.character == '*') results.symbols
+  |> List.map(fun sym ->
+      let adjacent_numbers = List.filter (fun n -> List.exists (fun pos -> are_positions_adjacent pos sym.position) n.positions) results.numbers in
+      if List.length adjacent_numbers == 2 then List.fold_left ( * ) 1 (List.map (fun x -> int_of_string x.value) adjacent_numbers) else 0
+    )
+  |> List.fold_left (+) 0
 
 let run () =
   let lines = Advent.read_lines file in
@@ -70,4 +81,7 @@ let run () =
     |> List.map (fun x -> int_of_string x.value)
     |> List.fold_left (+) 0 in
 
-  print_int sum
+  print_int sum;
+  print_endline "";
+
+  print_int (find_gears_sum results)
