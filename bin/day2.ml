@@ -1,9 +1,5 @@
+open Advent.String
 let file = "inputs/day2.in"
-
-let split_in_two char str =
-  match String.split_on_char char str with
-  | [elem1; elem2] -> (elem1, elem2)
-  | _ -> raise (Invalid_argument (String.cat "Splits into more than two: " str))
 
 type result = {green : int; red : int; blue : int}
 type game = {no : int; results : result list}
