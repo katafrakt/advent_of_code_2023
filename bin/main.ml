@@ -5,7 +5,8 @@ end
 let days : (module Day) Array.t = [|
   (module Day1);
   (module Day2);
-  (module Day3)
+  (module Day3);
+  (module Day4)
 |]
 
 let () = 
