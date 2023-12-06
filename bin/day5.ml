@@ -60,18 +60,20 @@ let process_seeds seeds transformations =
 
 (* part 2 *)
 let rec find_min_for_range cur_min start len transformations =
-  if len == 0 then cur_min else
-    match process_seeds [start] transformations with
-    | [value] -> let new_min = if value < cur_min then value else cur_min in
-      find_min_for_range new_min (start + 1) (len - 1) transformations
+  if len == 0 then cur_min
+  else
+    match process_seeds [ start ] transformations with
+    | [ value ] ->
+        let new_min = if value < cur_min then value else cur_min in
+        find_min_for_range new_min (start + 1) (len - 1) transformations
     | _ -> raise (Invalid_argument "geez")
 
 let rec run_on_seed_ranges cur_min seeds transformations =
   match seeds with
-  | start :: (len :: rest) ->
-    let min = find_min_for_range cur_min start len transformations in
-    let min = if min < cur_min then min else cur_min in
-    run_on_seed_ranges min rest transformations
+  | start :: len :: rest ->
+      let min = find_min_for_range cur_min start len transformations in
+      let min = if min < cur_min then min else cur_min in
+      run_on_seed_ranges min rest transformations
   | _ -> cur_min
 
 (* run *)
