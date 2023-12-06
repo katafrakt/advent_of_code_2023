@@ -58,10 +58,30 @@ let transform_one acc transformation =
 let process_seeds seeds transformations =
   List.fold_left transform_one seeds transformations
 
+(* part 2 *)
+let rec find_min_for_range cur_min start len transformations =
+  if len == 0 then cur_min else
+    match process_seeds [start] transformations with
+    | [value] -> let new_min = if value < cur_min then value else cur_min in
+      find_min_for_range new_min (start + 1) (len - 1) transformations
+    | _ -> raise (Invalid_argument "geez")
+
+let rec run_on_seed_ranges cur_min seeds transformations =
+  match seeds with
+  | start :: (len :: rest) ->
+    let min = find_min_for_range cur_min start len transformations in
+    let min = if min < cur_min then min else cur_min in
+    run_on_seed_ranges min rest transformations
+  | _ -> cur_min
+
+(* run *)
 let run () =
   let lines = Advent.read_lines file in
   let seeds = read_seeds lines in
   let lines = skip_line lines in
   let transformations = read_transformations [] None lines in
   let processed = process_seeds seeds transformations in
-  print_int (List.fold_left min max_int processed)
+  print_int (List.fold_left min max_int processed);
+  print_newline ();
+  let part2_min = run_on_seed_ranges max_int seeds transformations in
+  print_endline (string_of_int part2_min)
