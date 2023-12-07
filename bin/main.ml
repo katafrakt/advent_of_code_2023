@@ -10,6 +10,7 @@ let days : (module Day) Array.t =
     (module Day4);
     (module Day5);
     (module Day6);
+    (module Day7);
   |]
 
 let () =
