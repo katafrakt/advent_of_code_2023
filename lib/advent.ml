@@ -24,3 +24,26 @@ module String = struct
     | _ ->
         raise (Invalid_argument (String.cat "Splits into more than two: " str))
 end
+
+module List = struct
+  let to_pairs list =
+    match list with
+    | el1 :: el2 :: tail ->
+        List.fold_left
+          (fun acc el ->
+            let _, y = List.hd acc in
+            (y, el) :: acc)
+          [ (el1, el2) ]
+          tail
+        |> List.rev
+    | _ -> raise (Invalid_argument "List has less than two elements")
+
+  let inspect_of_ints list =
+    List.iter
+      (fun x ->
+        print_int x;
+        print_string " ")
+      list;
+    print_newline ();
+    list
+end
