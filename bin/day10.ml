@@ -62,13 +62,17 @@ let rec walk_pipes branches positions =
     | '7' -> [ (x - 1, y); (x, y + 1) ]
     | '|' -> [ (x, y - 1); (x, y + 1) ]
     | '-' -> [ (x + 1, y); (x - 1, y) ]
-    | _ ->  [ (x, y); (x, y) ])
+    | _ -> [ (x, y); (x, y) ])
     |> List.filter (fun x -> not (pos_equal x branch.from))
     |> List.hd
   in
 
   let new_branches =
-    List.map (fun b -> let next = get_next b in { steps = b.steps + 1; from = b.current; current = next }) branches
+    List.map
+      (fun b ->
+        let next = get_next b in
+        { steps = b.steps + 1; from = b.current; current = next })
+      branches
   in
   match new_branches with
   | [ b1; b2 ] ->
